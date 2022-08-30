@@ -51,17 +51,21 @@ class _MyAppState extends State<MyApp> {
     setState(() => _questionIndex += 1);
   }
 
+  void _resetQuiz() {
+    setState(() {
+      _totalScore = 0;
+      _questionIndex = 0;
+    });
+  }
+
   @override
   build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(title: const Text("Quizz App")),
         body: _questionIndex < _questions.length
-            ? Quiz(
-                _questions,
-                _questionIndex,
-                _answerQuestion)
-            : Result(_totalScore),
+            ? Quiz(_questions, _questionIndex, _answerQuestion)
+            : Result(_totalScore, _resetQuiz),
       ),
     );
   }
