@@ -32,11 +32,12 @@ class Result extends StatelessWidget {
             ),
             textAlign: TextAlign.center,
           ),
-          TextButton(
+          OutlinedButton(
               onPressed: resetQuiz,
               child: const Text(
                 "Restart Quiz",
                 style: TextStyle(color: Colors.blue),
+
               )),
         ],
       ),
