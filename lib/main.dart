@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_complete_guide/answer.dart';
-import 'package:flutter_complete_guide/question.dart';
+import 'package:flutter_complete_guide/quiz.dart';
+import 'package:flutter_complete_guide/result.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -14,28 +14,41 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   var _questionIndex = 0;
 
-  final questions = const [
+  final _questions = const [
     {
       "questionText": "What's your favorite Colour?",
-      "answers": ["Red", "Blue", "Green"],
+      "answers": [
+        {"text": "Red", "score": 10},
+        {"text": "Blue", "score": 5},
+        {"text": "Green", "score": 100},
+      ],
       "correctAnswer": "Blue"
     },
     {
       "questionText": "What's your favourite Animal?",
-      "answers": ["Dog", "Horse", "Cat"],
+      "answers": [
+        {"text": "Dog", "score": 10},
+        {"text": "Horse", "score": 5},
+        {"text": "Cat", "score": 2},
+      ],
       "correctAnswer": "Cat"
     },
     {
       "questionText": "Whats your favorite Dessert?",
-      "answers": ["Cheesecake", "Ice Cream", "Custard"],
+      "answers": [
+        {"text": "Cheesecake", "score": 2},
+        {"text": "Ice Cream", "score": 25},
+        {"text": "Custard", "score": 5}
+      ],
       "correctAnswer": "Cheesecake"
     },
   ];
 
-  void _answerQuestion() {
-    setState(() => {
-          if (_questionIndex < questions.length) {_questionIndex += 1}
-        });
+  var _totalScore = 0;
+
+  void _answerQuestion(int score) {
+    _totalScore += score;
+    setState(() => _questionIndex += 1);
   }
 
   @override
@@ -43,18 +56,12 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(title: const Text("Quizz App")),
-        body: _questionIndex < questions.length
-            ? Column(
-                children: <Widget>[
-                  Question(questions[_questionIndex]['questionText'] as String),
-                  ...(questions[_questionIndex]['answers'] as List<String>)
-                      .map((a) => Answer(_answerQuestion, a))
-                      .toList(),
-                ],
-              )
-            : const Center(
-                child: Text("You did it!"),
-              ),
+        body: _questionIndex < _questions.length
+            ? Quiz(
+                _questions,
+                _questionIndex,
+                _answerQuestion)
+            : Result(_totalScore),
       ),
     );
   }
